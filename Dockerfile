@@ -1,14 +1,20 @@
 FROM python:3.8
 
-RUN mkdir -p /app
+RUN mkdir -p /app_python
 
-COPY requirements.txt .
+COPY flask-pytest-example-v2.tar.gz /app_python
 
-RUN pip install -r requirements.txt
+WORKDIR /app_python
+
+RUN tar -xvf flask-pytest-example-v2.tar.gz
+
+WORKDIR /app_python/flask-pytest-example-v2.tar.gz
+
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY python.applica/ . 
 
-CMD [ "python", "./server.py" ]
+CMD python app.py
 
 # copy the packaged jar file into our docker image
 #COPY helloWorld.class /app
