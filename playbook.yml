@@ -12,7 +12,7 @@
       register: result_install
         
     - name: Installation de python
-      shell: sudo amazon-linux-extras install python3.8
+      shell: sudo amazon-linux-extras install -y python3.8 
       register: result_install
     - debug:
         var=result_install
@@ -25,11 +25,16 @@
         mode: 0777
         owner: ec2-user
         
-  - name: "Copier (faire un scp) le fichier local Dockerfile sur le dossier remote /app"
+  - name: Copier (faire un scp) le fichier local Dockerfile sur le dossier remote /app
       copy:
         src: Dockerfile
         dest: /app
         mode: 0644
+
+  - name: Envoyer le dossier compresser et le décompresser sur la machine distante
+      archive:
+        path: /python.applica/flask-pytest-example-v2
+        format: zip
 
    - name: On genere l'image docker, on l'appelle formation/python:1.0
       shell: cd /app && docker build -t formation/python:1.0 .
