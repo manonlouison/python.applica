@@ -17,7 +17,7 @@
     - debug:
         var=result_install
 
-  - name: Création du dossier /app sur la machine distante
+    - name: Création du dossier /app sur la machine distante
       #shell: mkdir -p /app && chmod -R 777 /app && chown ec2-user /app
       file: #mieux car idempotent par rapport au module shell
         path: /app
@@ -25,29 +25,29 @@
         mode: 0777
         owner: ec2-user
         
-  - name: Copier (faire un scp) le fichier local Dockerfile sur le dossier remote /app
+    - name: Copier (faire un scp) le fichier local Dockerfile sur le dossier remote /app
       copy:
         src: Dockerfile
         dest: /app
         mode: 0644
 
-  - name: Envoyer le dossier compresser et le décompresser sur la machine distante
+    - name: Envoyer le dossier compresser et le décompresser sur la machine distante
       archive:
         path: /python.applica/flask-pytest-example-v2
         format: zip
 
-   - name: On genere l'image docker, on l'appelle formation/python:1.0
+    - name: On genere l'image docker, on l'appelle formation/python:1.0
       shell: cd /app && docker build -t formation/python:1.0 .
       #On prend tout ce qui est du stdout et on le met dans la variable result
       register: result
-   - debug:
+    - debug:
         var=result
 
 
-   - name: On execute le contenur de l'image docker formation/python:1.0
+    - name: On execute le contenur de l'image docker formation/python:1.0
       shell: docker run --rm --name conteneur_app formation/python:1.0
       #On prend tout ce qui est du stdout et on le met dans la variable result
       register: result
-   - debug:
+    - debug:
         var=result
 
