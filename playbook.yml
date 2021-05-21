@@ -17,7 +17,7 @@
     - debug:
         var=result_install
 
- - name: Création du dossier /app sur la machine distante
+  - name: Création du dossier /app sur la machine distante
       #shell: mkdir -p /app && chmod -R 777 /app && chown ec2-user /app
       file: #mieux car idempotent par rapport au module shell
         path: /app
