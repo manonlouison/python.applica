@@ -24,6 +24,12 @@
         state: directory
         mode: 0777
         owner: ec2-user
+    
+     - name: Copier (faire un scp) l'archive dans  le dossier remote /app
+      copy:
+        src: python.tar.gz
+        dest: /app
+        mode: 0644
         
     - name: Copier (faire un scp) le fichier local Dockerfile sur le dossier remote /app
       copy:
@@ -31,10 +37,14 @@
         dest: /app
         mode: 0644
 
-    - name: Envoyer le dossier compresser et le décompresser sur la machine distante
-      archive:
-        path: /python.applica/flask-pytest-example-v2
-        format: zip
+    - name: Envoyer le dossier archiver (compresser et le décompresser) sur la machine distante
+ #     archive:
+ #       path: /python.applica/flask-pytest-example-v2
+ #      format: zip
+      copy:
+        src: Dockerfile
+        dest: /app
+        mode: 0644
 
     - name: On genere l'image docker, on l'appelle formation/python:1.0
       shell: cd /app && docker build -t formation/python:1.0 .
