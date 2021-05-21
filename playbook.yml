@@ -1,0 +1,44 @@
+---
+- name: Deploiement de l'application Python
+  hosts: all
+  become: yes
+
+  tasks:
+#    - name: Execute the command in remote shell; stdout goes to the specified file on the remote.
+#      shell: echo "HelloWorld" > log.txt
+
+    - name: Installation de python
+      shell: sudo amazon-linux-extras install python3.8
+      register: result_install
+    - debug:
+        var=result_install
+
+ - name: Création du dossier /app sur la machine distante
+      #shell: mkdir -p /app && chmod -R 777 /app && chown ec2-user /app
+      file: #mieux car idempotent par rapport au module shell
+        path: /app
+        state: directory
+        mode: 0777
+        owner: ec2-user
+        
+  - name: "Copier (faire un scp) le fichier local Dockerfile sur le dossier remote /app"
+      copy:
+        src: Dockerfile
+        dest: /app
+        mode: 0644
+
+   - name: On genere l'image docker, on l'appelle formation/java:1.0
+      shell: cd /app && docker build -t formation/java:1.0 .
+      #On prend tout ce qui est du stdout et on le met dans la variable result
+      register: result
+   - debug:
+        var=result
+
+
+   - name: On execute le contenur de l'image docker formation/java:1.0
+      shell: docker run --rm --name conteneur_app formation/java:1.0
+      #On prend tout ce qui est du stdout et on le met dans la variable result
+      register: result
+   - debug:
+        var=result
+© 2021 GitHub, Inc.
