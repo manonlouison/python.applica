@@ -1,7 +1,14 @@
-FROM python:latest
+FROM python:3.8
 
- 
 RUN mkdir /app
+
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
+COPY python.applica/ . 
+
+CMD [ "python", "./server.py" ]
 
 # copy the packaged jar file into our docker image
 #COPY helloWorld.class /app
