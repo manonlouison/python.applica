@@ -1,8 +1,7 @@
 FROM python:latest
 
-TAR 
  
-#RUN mkdir /app
+RUN mkdir /app
 
 # copy the packaged jar file into our docker image
 #COPY helloWorld.class /app
